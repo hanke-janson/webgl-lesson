@@ -22,7 +22,7 @@
     <!-- 顶点着色器  -->
     <script id="vertexShader" type="x-shader/x-vertex">
     void main(){
-      //点位（这里写死了，可以接收变量的） x y z(会影响相机深度)
+      //点位（这里写死了，可以接收变量的） x y z(会影响相机深度) w通常表示一个顶点到相机的距离
       gl_Position=vec4(0,0,0,1);
       //尺寸
       gl_PointSize=100.0;
