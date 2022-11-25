@@ -57,7 +57,7 @@
     // a_Position=vec4(1,0,0,1)
     const a_Position = gl.getAttribLocation(gl.program, "a_Position");
     const a_PointSize = gl.getAttribLocation(gl.program, "a_PointSize");
-
+    // 绘点时将点信息均存入数组中
     const a_points = [{ x: 0, y: 0, size: 10 }];
 
     //修改attribute 变量

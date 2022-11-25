@@ -1,22 +1,28 @@
-
+//建立时间轨
 export default class Track {
   constructor(target) {
+    // target目标对象 在目标对象上加动画
     this.target = target;
+    //合成对象
     this.parent = null;
+    // 动画开始时间
     this.start = 0;
+    // 时间轨长度
     this.timeLen = 5;
-    this.loop = false;
+    // 是否循环关键帧
+      this.loop = false;
+      // 关键帧集合，后面给不同属性不同关键帧
     this.keyMap = new Map();
-    this.onEnd = () => { }
-    this.prevTime=0
+    this.onEnd = () => {};
+    this.prevTime = 0;
   }
   update(t) {
-    const { keyMap, timeLen, target, loop, start,prevTime } = this;
+    const { keyMap, timeLen, target, loop, start, prevTime } = this;
     let time = t - start;
     if (timeLen >= prevTime && timeLen < time) {
-      this.onEnd()
+      this.onEnd();
     }
-    this.prevTime=time
+    this.prevTime = time;
     if (loop) {
       time = time % timeLen;
     }

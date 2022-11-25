@@ -2,25 +2,25 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>修改顶点颜色</title>
-  <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8" />
+    <title>修改顶点颜色</title>
+    <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
 
-    #canvas {
-      background-color: antiquewhite;
-    }
-  </style>
+        #canvas {
+            background-color: antiquewhite;
+        }
+    </style>
 </head>
 
 <body>
-  <canvas id="canvas"></canvas>
-  <!-- 顶点着色器 -->
-  <script id="vertexShader" type="x-shader/x-vertex">
+    <canvas id="canvas"></canvas>
+    <!-- 顶点着色器 -->
+    <script id="vertexShader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
     void main(){
         //点位
@@ -29,54 +29,57 @@
         gl_PointSize=50.0;
     }
   </script>
-  <!-- 片元着色器 -->
-  <script id="fragmentShader" type="x-shader/x-fragment">
+    <!-- 片元着色器 -->
+    <script id="fragmentShader" type="x-shader/x-fragment">
+    // 对浮点数精度的定义 precision 是精度的意思 mediump 是中等精度的意思，这个必须要有，不然画不出东西来
     precision mediump float;
+    // 限定颜色变量的限定符叫uniform 统一，一致
+    // 将控制顶点颜色的变量暴露出来
     uniform vec4 u_FragColor;
     void main(){
         gl_FragColor=u_FragColor;
     }
   </script>
-  <script type="module">
-    import { initShaders } from "../jsm/Utils.js";
+    <script type="module">
+        import { initShaders } from "../jsm/Utils.js";
 
-    const canvas = document.querySelector("#canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        const canvas = document.querySelector("#canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    // 获取着色器文本
-    const vsSource = document.querySelector("#vertexShader").innerText;
-    const fsSource = document.querySelector("#fragmentShader").innerText;
+        // 获取着色器文本
+        const vsSource = document.querySelector("#vertexShader").innerText;
+        const fsSource = document.querySelector("#fragmentShader").innerText;
 
-    //三维画笔
-    const gl = canvas.getContext("webgl");
+        //三维画笔
+        const gl = canvas.getContext("webgl");
 
-    //初始化着色器
-    initShaders(gl, vsSource, fsSource);
+        //初始化着色器
+        initShaders(gl, vsSource, fsSource);
 
-    //声明颜色 rgba
-    gl.clearColor(0, 0, 0, 1);
-    //刷底色
-    gl.clear(gl.COLOR_BUFFER_BIT);
+        //声明颜色 rgba
+        gl.clearColor(0, 0, 0, 1);
+        //刷底色
+        gl.clear(gl.COLOR_BUFFER_BIT);
 
-    //设置attribute 变量
-    // a_Position=vec4(1,0,0,1)
-    const a_Position = gl.getAttribLocation(gl.program, "a_Position");
+        //设置attribute 变量
+        // a_Position=vec4(1,0,0,1)
+        const a_Position = gl.getAttribLocation(gl.program, "a_Position");
 
-    //获取uniform 变量
-    const u_FragColor = gl.getUniformLocation(gl.program, "u_FragColor");
+        //获取uniform 变量
+        const u_FragColor = gl.getUniformLocation(gl.program, "u_FragColor");
 
-    //修改attribute 变量
-    // gl.vertexAttrib3f(a_Position, 0, 1, 0);
-    // gl.vertexAttrib2f(a_Position, 0.5, 0.5);
-    gl.vertexAttrib1f(a_Position, 0.1);
+        //修改attribute 变量
+        // gl.vertexAttrib3f(a_Position, 0, 1, 0);
+        // gl.vertexAttrib2f(a_Position, 0.5, 0.5);
+        gl.vertexAttrib1f(a_Position, 0.1);
 
-    //修改uniform 变量
-    gl.uniform4f(u_FragColor, 1, 0, 1, 1);
+        //修改uniform 变量  颜色值为在片元着色器中是浮点数
+        gl.uniform4f(u_FragColor, 1., 0., .4, 1.);
 
-    //绘制顶点
-    gl.drawArrays(gl.POINTS, 0, 1);
-  </script>
+        //绘制顶点
+        gl.drawArrays(gl.POINTS, 0, 1);
+    </script>
 </body>
 
 </html>

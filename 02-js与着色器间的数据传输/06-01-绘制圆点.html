@@ -35,10 +35,13 @@
       precision mediump float;
       uniform vec4 u_FragColor;
       void main(){
+        // distance() 计算两点距离
+        // gl_PointCoord 片元在一个点中的位置，此位置是被归一化的
         float dist=distance(gl_PointCoord,vec2(0.5,0.5));
         if(dist<0.5){
           gl_FragColor=u_FragColor;
         }else{
+          // discard 丢弃，即不会对这个片元进行渲染
           discard;
         }
       }
@@ -123,6 +126,11 @@
         gl.drawArrays(gl.POINTS, 0, 1);
       });
     }
+  </script>
+  <script>
+    // 片元着色器的绘图原理
+    // 屏幕里的点是一个像素一个像素组成的。片元着色器是一个像素一个像素去画的，每画一个像素都会执行一下片元着色器中的main方法
+    // 着色器语法参考<https://www.khronos.org/registry/OpenGL-Refpages/gl4/>
   </script>
 </body>
 
