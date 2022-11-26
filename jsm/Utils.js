@@ -45,7 +45,7 @@ function loadShader(gl, type, source) {
   //返回着色器对象
   return shader;
 }
-
+// webgl坐标
 function getMousePosInWebgl({ clientX, clientY }, canvas) {
   //鼠标在画布中的css位置
   const { left, top, width, height } = canvas.getBoundingClientRect();
@@ -61,7 +61,7 @@ function getMousePosInWebgl({ clientX, clientY }, canvas) {
     y: yBaseCenterTop / halfHeight,
   };
 }
-
+// css坐标
 function glToCssPos({ x, y }, { width, height }) {
   const [halfWidth, halfHeight] = [width / 2, height / 2];
   return {

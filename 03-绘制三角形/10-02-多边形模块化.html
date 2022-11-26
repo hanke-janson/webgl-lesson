@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <title>多边形模块化</title>
     <style>
-      body {
-        margin: 0;
-        overflow: hidden;
-      }
-      #canvas {
-        background-color: antiquewhite;
-      }
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+
+        #canvas {
+            background-color: antiquewhite;
+        }
     </style>
-  </head>
-  <body>
+</head>
+
+<body>
     <canvas id="canvas"></canvas>
     <!-- 顶点着色器 -->
     <script id="vertexShader" type="x-shader/x-vertex">
@@ -30,44 +33,45 @@
       }
     </script>
     <script type="module">
-      import { initShaders } from "../jsm/Utils.js";
-      import Poly from "../jsm/Poly.js";
+        import { initShaders } from "../jsm/Utils.js";
+        import Poly from "../jsm/Poly.js";
 
-      const canvas = document.querySelector("#canvas");
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+        const canvas = document.querySelector("#canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-      // 获取着色器文本
-      const vsSource = document.querySelector("#vertexShader").innerText;
-      const fsSource = document.querySelector("#fragmentShader").innerText;
+        // 获取着色器文本
+        const vsSource = document.querySelector("#vertexShader").innerText;
+        const fsSource = document.querySelector("#fragmentShader").innerText;
 
-      //三维画笔
-      const gl = canvas.getContext("webgl");
+        //三维画笔
+        const gl = canvas.getContext("webgl");
 
-      //初始化着色器
-      initShaders(gl, vsSource, fsSource);
-      //声明颜色 rgba
-      gl.clearColor(0, 0, 0, 1);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-
-
-      const poly=new Poly({
-        gl,
-        vertices:[0, 0.2]
-      })
-      poly.draw(['POINTS'])
-
-      setTimeout(()=>{
-        poly.addVertice(-0.2,-0.1)
+        //初始化着色器
+        initShaders(gl, vsSource, fsSource);
+        //声明颜色 rgba
+        gl.clearColor(0, 0, 0, 1);
         gl.clear(gl.COLOR_BUFFER_BIT);
+
+
+        const poly = new Poly({
+            gl,
+            vertices: [0, 0.2]
+        })
         poly.draw(['POINTS'])
-      },1000)
 
-      setTimeout(()=>{
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        poly.draw(['POINTS','LINE_STRIP'])
-      },2000)
+        setTimeout(() => {
+            poly.addVertice(-0.2, -0.1)
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            poly.draw(['POINTS'])
+        }, 1000)
+
+        setTimeout(() => {
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            poly.draw(['POINTS', 'LINE_STRIP'])
+        }, 2000)
 
     </script>
-  </body>
+</body>
+
 </html>

@@ -57,7 +57,7 @@
     //刷底色
     gl.clear(gl.COLOR_BUFFER_BIT);
 
-    //路径G-逆时针
+    //路径G-css坐标逆时针绘图，否则在webgl中不好显示
     const pathData = [
       0, 0,
       0, 600,
@@ -101,7 +101,7 @@
     rect.draw();
 
 
-    //建立比例尺
+    //建立比例尺 将css的极小和极大值与webGL做映射
     const scaleX = ScaleLinear(
       0, minX,
       600, maxX

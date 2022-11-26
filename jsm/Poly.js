@@ -7,9 +7,9 @@ const defAttr = () => ({
   // 数据分量 - 一个点有多少个分量x,y
   size: 2,
   attrName: "a_Position",
-    uniName: "u_IsPOINTS",
+  uniName: "u_IsPOINTS",
   // 顶点数量
-    count: 0,
+  count: 0,
   // 绘图方式
   types: ["POINTS"],
   circleDot: false,
@@ -17,6 +17,7 @@ const defAttr = () => ({
 });
 export default class Poly {
   constructor(attr) {
+    //合并 自定义的属性会覆盖默认和this
     Object.assign(this, defAttr(), attr);
     this.init();
   }
@@ -42,25 +43,29 @@ export default class Poly {
       this.u_IsPOINTS = gl.getUniformLocation(gl.program, "u_IsPOINTS");
     }
   }
-
+  // 更新缓冲区数据，同时更新顶点数量
   updateBuffer() {
     const { gl, vertices } = this;
     this.updateCount();
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
   }
+  // 更新顶点数量
   updateCount() {
     this.count = this.vertices.length / this.size;
   }
+  // 添加顶点
   addVertice(...params) {
     this.vertices.push(...params);
     this.updateBuffer();
   }
+  // 删除最后一个顶点
   popVertice() {
     const { vertices, size } = this;
     const len = vertices.length;
     vertices.splice(len - size, len);
     this.updateCount();
   }
+  // 根据索引位置设置顶点
   setVertice(ind, ...params) {
     const { vertices, size } = this;
     const i = ind * size;
@@ -68,6 +73,7 @@ export default class Poly {
       vertices[i + paramInd] = param;
     });
   }
+  // 基于geoData解析vertices数据
   updateVertices(params) {
     const { geoData } = this;
     const vertices = [];
@@ -78,6 +84,7 @@ export default class Poly {
     });
     this.vertices = vertices;
   }
+  // 绘图方法
   draw(types = this.types) {
     const { gl, count, circleDot, u_IsPOINTS } = this;
     for (let type of types) {

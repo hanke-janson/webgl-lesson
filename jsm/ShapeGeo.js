@@ -1,8 +1,12 @@
+// 图形转面  -  '砍角'
 export default class ShapeGeo {
-  constructor(pathData=[]) {
+  // pathData 顶点数据
+  constructor(pathData = []) {
     this.pathData = pathData;
     this.geoData = [];
+    // 三角形集合
     this.triangles = [];
+    // 独立三角形数据 用作渲染
     this.vertices = [];
     this.parsePath();
     this.update();
@@ -11,31 +15,25 @@ export default class ShapeGeo {
     this.vertices = [];
     this.triangles = [];
     this.findTriangle(0);
-    this.upadateVertices()
+    this.upadateVertices();
   }
   parsePath() {
     this.geoData = [];
-    const { pathData, geoData } = this
+    const { pathData, geoData } = this;
     for (let i = 0; i < pathData.length; i += 2) {
-      geoData.push({ x: pathData[i], y: pathData[i + 1] })
+      geoData.push({ x: pathData[i], y: pathData[i + 1] });
     }
   }
+  // 寻找三角形
   findTriangle(i) {
     const { geoData, triangles } = this;
     const len = geoData.length;
     if (geoData.length <= 3) {
       triangles.push([...geoData]);
     } else {
-      const [i0, i1, i2] = [
-        i % len,
-        (i + 1) % len,
-        (i + 2) % len
-      ];
-      const triangle = [
-        geoData[i0],
-        geoData[i1],
-        geoData[i2],
-      ];
+      const [i0, i1, i2] = [i % len, (i + 1) % len, (i + 2) % len];
+      // 逆时针绘图
+      const triangle = [geoData[i0], geoData[i1], geoData[i2]];
       if (this.cross(triangle) > 0 && !this.includePoint(triangle)) {
         triangles.push(triangle);
         geoData.splice(i1, 1);
@@ -60,11 +58,12 @@ export default class ShapeGeo {
       const [p1, p2] = [triangle[i], triangle[j]];
       if (this.cross([p0, p1, p2]) < 0) {
         inPoly = false;
-        break
+        break;
       }
     }
     return inPoly;
   }
+  // 点c在向量AB的正开平面里
   cross([p0, p1, p2]) {
     const [ax, ay, bx, by] = [
       p1.x - p0.x,
@@ -75,12 +74,12 @@ export default class ShapeGeo {
     return ax * by - bx * ay;
   }
   upadateVertices() {
-    const arr = []
-    this.triangles.forEach(triangle => {
+    const arr = [];
+    this.triangles.forEach((triangle) => {
       for (let { x, y } of triangle) {
-        arr.push(x, y)
+        arr.push(x, y);
       }
-    })
-    this.vertices = arr
+    });
+    this.vertices = arr;
   }
 }
