@@ -17,7 +17,7 @@
     <canvas id="canvas"></canvas>
     <script id="vertexShader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
-    //视图矩阵
+    //视图矩阵，用于确定相机角度和位置的矩阵
     uniform mat4 u_ViewMatrix;
     void main(){
       gl_Position = u_ViewMatrix*a_Position;
@@ -29,6 +29,7 @@
     }
   </script>
     <script type="module">
+        // 正交旋转矩阵的逆矩阵就是其旋转矩阵
         import { initShaders } from '../jsm/Utils.js';
         import { Matrix4, Vector3, Quaternion } from 'https://unpkg.com/three/build/three.module.js';
 
@@ -42,7 +43,7 @@
         const fsSource = document.getElementById('fragmentShader').innerText;
         initShaders(gl, vsSource, fsSource);
 
-
+        // 立方体的八个顶点
         const verticeLib = [
             1.0, 1.0, 1.0,
             -1.0, 1.0, 1.0,
@@ -53,7 +54,7 @@
             -1.0, 1.0, -1.0,
             -1.0, -1.0, -1.0,
         ];
-
+        // 对应顶点的索引位置， 两个点对应着一条线
         const indices = [
             0, 1,
             1, 2,
@@ -91,8 +92,11 @@
 
         const u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix')
         const viewMatrix = getViewMatrix(
-            new Vector3(0.1, 0.2, 0.5),
+            // 视点
+            new Vector3(0.2, 0.2, 0.4),
+            // 目标点
             new Vector3(0, 0, 0),
+            // 上方向
             new Vector3(0, 1, 0)
         )
         gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix)
@@ -101,7 +105,7 @@
         gl.clear(gl.COLOR_BUFFER_BIT);
         gl.drawArrays(gl.LINES, 0, indices.length);
 
-
+        // 视点e，目标点t，上方向u
         function getViewMatrix(e, t, u) {
             //基向量c，视线
             const c = new Vector3().subVectors(e, t).normalize()

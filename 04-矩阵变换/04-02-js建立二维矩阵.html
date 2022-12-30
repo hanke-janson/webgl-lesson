@@ -60,11 +60,12 @@
         let angle = 0.5
         const sinB = Math.sin(angle)
         const cosB = Math.cos(angle)
+        // 列主序
         const matrix = [
             cosB, sinB,
             -sinB, cosB
         ]
-        //   是否逆转矩阵
+        //       矩阵存放地址        是否逆转矩阵   矩阵
         gl.uniformMatrix2fv(u_Matrix, false, matrix)
 
 

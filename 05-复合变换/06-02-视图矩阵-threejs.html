@@ -89,6 +89,8 @@
         gl.enableVertexAttribArray(a_Position);
 
         const u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix')
+        // lookat()
+        // https://threejs.org/docs/index.html?q=Matr#api/en/math/Matrix4.lookAt
         const matrix = new Matrix4().lookAt(
             new Vector3(0.2, 0.2, 1),
             new Vector3(0, 0, 0),

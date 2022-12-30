@@ -16,7 +16,9 @@
 <body>
     <canvas id="canvas"></canvas>
     <script id="vertexShader" type="x-shader/x-vertex">
+    // attribute绑定的数据与顶点相关
     attribute vec4 a_Position;
+    // u_Translation不是与顶点直接相关的，所以使用uniform进行暴露
     uniform vec4 u_Translation;
     void main(){
         gl_Position = a_Position+u_Translation;
