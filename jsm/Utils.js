@@ -92,9 +92,12 @@ function SinFn(a, Omega, phi) {
 
 /* GetIndexInGrid
   在由一维数组建立的栅格矩阵中，基于行列获取元素的索引位置
+  @param {列数} w
+  @param {类目尺寸} size
 */
 function GetIndexInGrid(w, size) {
   return function (x, y) {
+    //xy当前顶点的列位置和行位置
     return (y * w + x) * size;
   };
 }

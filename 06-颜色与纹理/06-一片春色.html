@@ -47,6 +47,7 @@
         const vsSource = document.getElementById('vertexShader').innerText;
         const fsSource = document.getElementById('fragmentShader').innerText;
         initShaders(gl, vsSource, fsSource);
+        // 开启透明度合成
         gl.enable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
@@ -143,7 +144,7 @@
             gl.clear(gl.COLOR_BUFFER_BIT);
             wave.draw()
             wave.draw('LINES')
-            // wave.draw('TRIANGLES')
+            wave.draw('TRIANGLES')
         }
 
         /* 建立基础数据 */
@@ -157,6 +158,8 @@
                     const px = x * spaceX + minPosX
                     const pz = z * spaceZ + minPosZ
                     vertices.push(px, 0, pz, 1, 1, 1, 0.5)
+                    // 生成三角网的索引集合
+                    // z或者x为0时不做考虑 
                     if (z && x) {
                         const [x0, z0] = [x - 1, z - 1]
                         indexes.push(
@@ -170,11 +173,13 @@
                     }
                 }
             }
+            // 返回顶点集合和索引集合
             return { vertices, indexes }
         }
 
 
         /* 建立顶点集合 */
+        // 通过顶点阵列和三角形的顶点索引集合获取数据源的方法
         function getSource(vertices, indexes, categorySize) {
             const arr = []
             indexes.forEach(i => {

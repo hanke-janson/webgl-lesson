@@ -96,19 +96,22 @@
         //更新顶点高度
         function updateVertices() {
             const { vertices } = wave
+            // 遍历顶点，因为顶点坐标分量为3
             for (let i = 0; i < vertices.length; i += 3) {
                 const [posX, posZ] = [vertices[i], vertices[i + 2]]
                 const angZ = scalerZ(posZ)
                 const Omega = 2
                 // const a = 0.05
                 // const phi = 0
+                // 0.03为最低的波动幅度
                 const a = Math.sin(angZ) * 0.1 + 0.03
                 const phi = scalerX(posX)
+                // i+1对应顶点y值
                 vertices[i + 1] = SinFn(a, Omega, phi)(angZ)
             }
         }
 
-        /* 正弦函数 */
+        /* 正弦函数  y=Asin(ωx+φ)*/
         function SinFn(a, Omega, phi) {
             return function (x) {
                 return a * Math.sin(Omega * x + phi);

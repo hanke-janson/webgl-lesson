@@ -46,8 +46,11 @@
 
         /* 视图矩阵 */
         const viewMatrix = new Matrix4().lookAt(
-            new Vector3(1, 0.5, 0),
+            // 视点
+            new Vector3(0.2, 0.3, 1),
+            // 目标点
             new Vector3(),
+            // 上方向
             new Vector3(0, 1, 0)
         )
 
@@ -63,7 +66,7 @@
                 u_ViewMatrix: {
                     type: 'uniformMatrix4fv',
                     value: viewMatrix.elements
-                },
+                }, 
             }
         })
 
@@ -75,7 +78,7 @@
         function crtVertices(offset = 0) {
             const vertices = []
             for (let z = minPosZ; z < maxPosZ; z += 0.04) {
-                for (let x = minPosX; x < maxPosX; x += 0.1) {
+                for (let x = minPosX; x < maxPosX; x += 0.03) {
                     vertices.push(x, 0, z)
                 }
             }

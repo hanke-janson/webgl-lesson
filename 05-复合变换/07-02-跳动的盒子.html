@@ -114,7 +114,9 @@
         const maxY = 0.7
         let y = maxY
         let vy = 0
+        // 下落加速度
         const ay = -0.001
+        // 回弹时不做回弹衰减
         const bounce = 1
 
         !(function ani() {
@@ -125,9 +127,17 @@
 
             modelMatrix.makeRotationY(angle)
             modelMatrix.setPosition(0, y, 0)
-
+            /**
+             * [0, 1, 2, 3,
+             *  4, 5, 6, 7,
+             *  8, 9, 10,11,
+             *  12,13,14,15
+             * ]
+             * 因为是列主序矩阵，所以13索引位置的元素是控制y轴移动的元素
+             **/
             if (modelMatrix.elements[13] < minY) {
                 y = minY
+                // 将速度方向改变，回弹
                 vy *= -bounce
             }
 

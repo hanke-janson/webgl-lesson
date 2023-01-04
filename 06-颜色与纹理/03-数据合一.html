@@ -61,23 +61,25 @@
 
         //数据源
         const source = new Float32Array([
-            0, 0.4, 0, 0, 0, 1, 1,
-            -0.2, -0.1, 0, 0, 1, 0, 1,
-            0.2, -0.1, 0, 1, 1, 0, 1,
+            0.0,  0.4, 0.0,   0, 0, 1, 1,
+           -0.2, -0.1, 0.0,   0, 1, 0, 1,
+            0.2, -0.1, 0.0,   1, 0, 0, 1,
         ]);
-        //元素字节数
+        // 每个元素字节数
         const elementBytes = source.BYTES_PER_ELEMENT
-        //系列尺寸
+        // 系列尺寸 点位系列分量数  颜色系列分量数
         const verticeSize = 3
         const colorSize = 4
-        //类目尺寸
+        // 类目尺寸 两个系列尺寸分量之和
         const categorySize = verticeSize + colorSize
-        //类目字节数
+        // 类目字节数 类目尺寸*每个元素字节数
         const categoryBytes = categorySize * elementBytes
-        //系列字节索引位置
+        // 系列字节索引位置 缓冲区寻找数据时是按照字节索引位置寻找元素的
+        // 点位系列字节索引位置
         const verticeByteIndex = 0
+        // 颜色系列字节索引位置
         const colorByteIndex = verticeSize * elementBytes
-        //顶点总数
+        // 顶点总数 数据源的总长度/类目尺寸
         const sourceSize = source.length / categorySize
 
 
@@ -90,13 +92,19 @@
 
         //获取attribute 变量
         const a_Position = gl.getAttribLocation(gl.program, 'a_Position')
-        //修改attribute 变量
+        //修改attribute 变量  告诉顶点着色器以什么方式去缓冲区中取数据
         gl.vertexAttribPointer(
+            // attribute变量
             a_Position,
+            // 当前顶点位置系列尺寸
             verticeSize,
+            // 数据类型  浮点类型
             gl.FLOAT,
+            // 不做归一化处理
             false,
+            // 类目字节数
             categoryBytes,
+            // 顶点位置系列的字节索引
             verticeByteIndex
         )
         //赋能-批处理
@@ -115,8 +123,6 @@
         )
         //赋能-批处理
         gl.enableVertexAttribArray(a_Color)
-
-
 
         //刷底色
         gl.clear(gl.COLOR_BUFFER_BIT);

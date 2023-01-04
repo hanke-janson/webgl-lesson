@@ -1,15 +1,24 @@
 const defAttr = () => ({
+  // webgl上下文对象
   gl: null,
+  // 顶点集合
   vertices: [],
+  // 每个点对应着一个对象
   geoData: [],
+  // 顶点分量的数量，例如一个点的分量有xyz，就是3
   size: 3,
+  // attribute变量名称
   attrName: "a_Position",
+  // 存储uniform变量
   uniforms: {},
+  // 顶点数量
   count: 0,
+  // 绘图方式，默认为点
   types: ["POINTS"],
 });
 export default class Poly {
   constructor(attr) {
+    //将默认属性和自定义属性合并
     Object.assign(this, defAttr(), attr);
     this.init();
   }
@@ -35,10 +44,12 @@ export default class Poly {
   }
   updateUniform() {
     const { gl, uniforms } = this;
+    // 遍历uniforms对象，获取键值对
     for (let [key, val] of Object.entries(uniforms)) {
       const { type, value } = val;
       const u = gl.getUniformLocation(gl.program, key);
       if (type.includes("Matrix")) {
+        //Matrix类型的方法中第二个参数为false，指定是否转置矩阵
         gl[type](u, false, value);
       } else {
         gl[type](u, value);

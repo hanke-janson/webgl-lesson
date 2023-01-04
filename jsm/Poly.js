@@ -75,7 +75,9 @@ export default class Poly {
   }
   // 基于geoData解析vertices数据
   updateVertices(params) {
+    // geoData对象型数组，其中每个对象代表一个顶点
     const { geoData } = this;
+    // vertices是个平展开的顶点集合，是直接交给缓冲对象绘图的，操作不便
     const vertices = [];
     geoData.forEach((data) => {
       params.forEach((key) => {

@@ -71,6 +71,7 @@
 
         /* y 方向的坐标极值 */
         const [a1, a2] = [0.1, 0.03]
+        // 波动幅度
         const a12 = a1 + a2
         const [minY, maxY] = [-a12, a12]
 
@@ -128,18 +129,23 @@
         /* 渲染 */
         function render() {
             gl.clear(gl.COLOR_BUFFER_BIT);
-            wave.draw()
+            wave.draw();
         }
 
         /* 建立顶点集合 */
+        // 列数 行数 坐标极值
         function getSource(cols, rows, minPosX, maxPosX, minPosZ, maxPosZ) {
             const source = []
+            // 行高
             const spaceZ = (maxPosZ - minPosZ) / rows
+            // 列宽
             const spaceX = (maxPosX - minPosX) / cols
+            // 遍历行列  放入点位系列及颜色系列
             for (let z = 0; z < rows; z++) {
                 for (let x = 0; x < cols; x++) {
                     const px = x * spaceX + minPosX
                     const pz = z * spaceZ + minPosZ
+                    // 点位   y后面进行动态更新
                     source.push(px, 0, pz, 1, 1, 1, 1)
                 }
             }
@@ -158,6 +164,7 @@
                 const y = SinFn(a, Omega, phi)(angZ)
                 source[i + 1] = y
                 const h = scalerC(y)
+                // 色相 饱和度 亮度
                 const { r, g, b } = color.setHSL(h, 1, 0.6)
                 source[i + 3] = r
                 source[i + 4] = g
