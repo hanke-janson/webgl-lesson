@@ -46,7 +46,9 @@
 
 
         //数据源
+        // 竖直方向极值
         const maxV = 2
+        // 横向方向极值
         const maxU = 2
         const source = new Float32Array([
             -0.5, 0.5, 0, maxV,
@@ -122,17 +124,17 @@
                 gl.TEXTURE_MIN_FILTER,
                 gl.LINEAR
             )
-
-            /* gl.texParameteri(
-              gl.TEXTURE_2D,
-              gl.TEXTURE_WRAP_S,
-              gl.REPEAT
-            )
-            gl.texParameteri(
-              gl.TEXTURE_2D,
-              gl.TEXTURE_WRAP_T,
-              gl.REPEAT
-            ) */
+            // 默认值为gl.REPEAT
+            //  gl.texParameteri(
+            //   gl.TEXTURE_2D,
+            //   gl.TEXTURE_WRAP_S,
+            //   gl.REPEAT
+            // )
+            // gl.texParameteri(
+            //   gl.TEXTURE_2D,
+            //   gl.TEXTURE_WRAP_T,
+            //   gl.REPEAT
+            // ) 
 
             const u_Sampler = gl.getUniformLocation(gl.program, 'u_Sampler')
             gl.uniform1i(u_Sampler, 0)

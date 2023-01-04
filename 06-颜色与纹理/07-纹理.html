@@ -16,7 +16,9 @@
     <canvas id="canvas"></canvas>
     <script id="vertexShader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
+    // 图钉的位置
     attribute vec2 a_Pin;
+    // 因为要传给片元着色器，设置一个插值
     varying vec2 v_Pin;
     void main(){
       gl_Position = a_Position;
@@ -25,9 +27,11 @@
   </script>
     <script id="fragmentShader" type="x-shader/x-fragment">
     precision mediump float;
+    // 采样器
     uniform sampler2D u_Sampler;
     varying vec2 v_Pin;
     void main(){
+      //基于图钉位置在采样器中获取片元颜色
       gl_FragColor=texture2D(u_Sampler,v_Pin);
     }
   </script>
@@ -47,9 +51,14 @@
 
         //数据源
         const source = new Float32Array([
-            -0.5, 0.5, 0, 1,
-            -0.5, -0.5, 0, 0.0,
-            0.5, 0.5, 1.0, 1,
+            // 顶点位置系列    图钉位置系列
+            // 左上角点
+            -0.5, 0.5, 0.0, 1.0,
+            //左下角点
+            -0.5, -0.5, 0.0, 0.0,
+            // 右下角点
+            0.5, 0.5, 1.0, 1.0,
+            // 右上角点
             0.5, -0.5, 1.0, 0.0,
         ]);
         const FSIZE = source.BYTES_PER_ELEMENT;
@@ -96,32 +105,49 @@
         gl.enableVertexAttribArray(a_Pin);
 
         /* 图像预处理 */
+        // 将图像垂直翻转
+        // 栅格坐标系y轴朝下，所以图片是倒着的， uv坐标系y轴朝上
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1)
 
         /* 准备三个角色 */
-        gl.activeTexture(gl.TEXTURE1)
+        // 激活纹理单元
+        gl.activeTexture(gl.TEXTURE0)
+        // 建立纹理对象
         const texture = gl.createTexture()
+        // 将纹理对象装到纹理单元中  参数：纹理对象类型 纹理对象
         gl.bindTexture(gl.TEXTURE_2D, texture)
+        // 建立image对象
         const image = new Image()
         image.src = './images/erha.jpg'
         image.onload = function () {
+            // 当Image 图像加载成功后，把图像装进当前纹理单元的纹理对象里
             gl.texImage2D(
+                // 纹理类型
                 gl.TEXTURE_2D,
+                // 基本图像等级
                 0,
+                // 纹理中的颜色组件
                 gl.RGB,
+                // 纹理数据格式，必须和internalformat相同
                 gl.RGB,
+                // 纹理数据的数据类型   无符号字节
                 gl.UNSIGNED_BYTE,
+                // 图像源
                 image
             )
-
+            // 设置纹理对象相关属性
             gl.texParameteri(
                 gl.TEXTURE_2D,
+                // 键 - 值
+                // 纹理参数名  纹理缩小滤波器
                 gl.TEXTURE_MIN_FILTER,
+                // 相对应的纹理参数值 线性补间值
                 gl.LINEAR
             )
-
+            // 在js中获取采样器对应的Uniform变量
             const u_Sampler = gl.getUniformLocation(gl.program, 'u_Sampler')
-            gl.uniform1i(u_Sampler, 1)
+            // 告诉采样器，纹理对象在哪个单元中
+            gl.uniform1i(u_Sampler, 0)
 
             render()
         }

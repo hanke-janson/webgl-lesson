@@ -17,6 +17,7 @@
     <script id="vertexShader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
     attribute vec2 a_Pin;
+    // 通过模型矩阵进行旋转
     uniform mat4 u_ModelMatrix;
     varying vec2 v_Pin;
     void main(){
@@ -46,6 +47,7 @@
         initShaders(gl, vsSource, fsSource);
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
         gl.enable(gl.CULL_FACE);
+        //开启深度检测，正常显示遮挡关系
         gl.enable(gl.DEPTH_TEST);
 
         //数据源
@@ -136,7 +138,7 @@
         gl.enableVertexAttribArray(a_Pin);
 
 
-        //模型矩阵
+        //模型矩阵  变换魔方
         const modelMatrix = new Matrix4()
         const mx = new Matrix4().makeRotationX(0.02)
         const my = new Matrix4().makeRotationY(0.02)
@@ -153,7 +155,7 @@
         gl.bindTexture(gl.TEXTURE_2D, texture)
 
         const image = new Image()
-        image.src = './images/mf.jpg'
+        image.src = './images/mf2.jpg'
         image.onload = function () {
             gl.texImage2D(
                 gl.TEXTURE_2D,

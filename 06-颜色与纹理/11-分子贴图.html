@@ -118,26 +118,29 @@
             )
 
             //创建分子贴图
-            // gl.generateMipmap(gl.TEXTURE_2D)
+            gl.generateMipmap(gl.TEXTURE_2D)
 
             gl.texParameteri(
                 gl.TEXTURE_2D,
+                // 纹理放大滤波器，是纹理在webgl图形中被放大的情况，不需要分子贴图
                 gl.TEXTURE_MAG_FILTER,
+                // 取色方式
                 gl.LINEAR
             )
 
+            // gl.texParameteri(
+            //     gl.TEXTURE_2D,
+            //     // 纹理缩小滤波器，是纹理在webgl图形中被缩小的情况
+            //     gl.TEXTURE_MIN_FILTER,
+            //     gl.LINEAR
+            // )
             gl.texParameteri(
                 gl.TEXTURE_2D,
                 gl.TEXTURE_MIN_FILTER,
-                gl.LINEAR
+                gl.NEAREST_MIPMAP_LINEAR
             )
-            /* gl.texParameteri(
-              gl.TEXTURE_2D,
-              gl.TEXTURE_MIN_FILTER,
-              gl.NEAREST_MIPMAP_LINEAR
-            ) */
 
-
+            //注： 缩小滤波器的默认值取色方法是NEAREST_MIPMAP_LINEAR ，这个方法会从分子贴图里找分子图像，然后从其中取色，然而当我们没有使用gl.generateMipmap()方法建立分子贴图的时候，就得给它一个不需要从分子贴图中去色的方法，如LINEAR或NEAREST。
 
             const u_Sampler = gl.getUniformLocation(gl.program, 'u_Sampler')
             gl.uniform1i(u_Sampler, 0)

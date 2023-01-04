@@ -123,11 +123,14 @@
 
             gl.texParameteri(
                 gl.TEXTURE_2D,
+                // 纹理容器在s方向的尺寸
                 gl.TEXTURE_WRAP_S,
+                // 边缘夹紧，可以实现非二次幂图像的显示
                 gl.CLAMP_TO_EDGE
             )
             gl.texParameteri(
                 gl.TEXTURE_2D,
+                // 纹理容器在t方向的尺寸
                 gl.TEXTURE_WRAP_T,
                 gl.CLAMP_TO_EDGE
             )
