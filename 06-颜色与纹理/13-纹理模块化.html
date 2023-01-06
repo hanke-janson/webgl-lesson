@@ -44,7 +44,7 @@
         const fsSource = document.getElementById('fragmentShader').innerText;
         initShaders(gl, vsSource, fsSource);
         gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
+        // 缩小滤波器过滤方法的索引位置 与分子贴图相关的方法都是大于9727的
         console.log(gl.LINEAR);
         console.log(gl.NEAREST);
         console.log(gl.NEAREST_MIPMAP_NEAREST);
@@ -54,8 +54,8 @@
 
         //数据源
         const source = new Float32Array([
-            -0.5, 0.5, 0, 1,
-            -0.5, -0.5, 0, 0.0,
+            -0.5, 0.5, 0.0, 1,
+            -0.5, -0.5, 0.0, 0.0,
             0.5, 0.5, 1.0, 1,
             0.5, -0.5, 1.0, 0.0,
         ]);

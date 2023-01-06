@@ -112,6 +112,7 @@
     gl.texParameteri(
       gl.TEXTURE_2D,
       gl.TEXTURE_WRAP_S,
+      // 此视频尺寸不是二次幂的所以需要边缘夹紧
       gl.CLAMP_TO_EDGE
     )
     gl.texParameteri(
@@ -128,6 +129,7 @@
     const video = document.createElement('video');
     video.src = 'http://img.yxyy.name/ripples.mp4';
     video.autoplay = true;
+    // 视频不静音无法自动播放
     video.muted = true;
     video.loop = true;
     video.setAttribute("crossOrigin", 'Anonymous');

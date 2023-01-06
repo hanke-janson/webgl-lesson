@@ -33,15 +33,20 @@ export default class Track {
          */
     this.keyMap = new Map();
     this.onEnd = () => {};
+    // 存储上一次动画帧的时间
     this.prevTime = 0;
   }
   update(t) {
     const { keyMap, timeLen, target, loop, start, prevTime } = this;
     // 世界时间-开始时间（本地时间是指相对于当前时间轨而言的时间）
     let time = t - start;
+    // 动画总时长>=上一次动画请求时间 使得onEnd()只运行一次
+    // 动画总时长<本地时间   当前动画已经跑完
     if (timeLen >= prevTime && timeLen < time) {
+      // 这个时间轨道动画已跑完
       this.onEnd();
     }
+    // 更新上一次动画帧的时间为本地时间
     this.prevTime = time;
     if (loop) {
       // 对本地时间取余，时间轨又重新开始，相当于循环

@@ -29,10 +29,15 @@
   </script>
   <script id="fragmentShader" type="x-shader/x-fragment">
     precision mediump float;
+    // 原始图像
     uniform sampler2D u_Sampler;
+    // 第一个纹理图像
     uniform sampler2D u_Pattern1;
+    // 第二个纹理图像
     uniform sampler2D u_Pattern2;
+    // 蒙版图像
     uniform sampler2D u_Mask;
+    // 混合比率
     uniform float u_Ratio;
     varying vec2 v_Pin;
     void main(){
@@ -40,8 +45,10 @@
       vec4 p1=texture2D(u_Pattern1,v_Pin);
       vec4 p2=texture2D(u_Pattern2,v_Pin);
       vec4 m=texture2D(u_Mask,v_Pin);
+      // 白色
       vec4 p3=vec4(1,1,1,1);
       if(m.x>0.5){
+        // 当前片元在白色区域
         p3=mix(p1,p2,u_Ratio);
       }
       gl_FragColor=p3*o;

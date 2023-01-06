@@ -105,7 +105,13 @@
 
 
     const image = new Image()
+    // 跨域图像数据
     image.src = 'http://img.yxyy.name/erha.jpg'
+    // 设置跨域
+    // crossOrigin 接收的值有三种：
+    // undefined 是默认值，表示不需要向其它域名的服务器请求资源共享
+    // anonymous 向其它域名的服务器请求资源共享，但不需要向其发送任何信息
+    // use - credentials 向其它域名的服务器请求资源共享，并发送 cookies 等信息，服务器会通过这些信息决定是否授权
     image.setAttribute("crossOrigin", 'Anonymous')
     image.onload = function () {
       gl.texImage2D(

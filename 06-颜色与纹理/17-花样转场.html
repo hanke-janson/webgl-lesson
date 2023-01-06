@@ -25,16 +25,23 @@
   </script>
   <script id="fragmentShader" type="x-shader/x-fragment">
     precision mediump float;
+    // 原始图像采样器
     uniform sampler2D u_Sampler;
+    // 纹理图像采样器
     uniform sampler2D u_Pattern;
+    // 蒙版图像采样器
     uniform sampler2D u_Gradient;
+    // 混合比值
     uniform float u_Ratio;
     varying vec2 v_Pin;
     void main(){
       vec4 o=texture2D(u_Sampler,v_Pin);
       vec4 p=texture2D(u_Pattern,v_Pin);
       vec4 g=texture2D(u_Gradient,v_Pin);
+      // g.r 蒙版图像（灰度图）的亮度 在着色器中向量的rgb和xyz是一回事
+      // clamp(n, min, max)限定数据极值  n<min取min,n>max取max, 其他返回n
       float f=clamp((g.r + u_Ratio), 0.0, 1.0);
+      // 混合插值
       gl_FragColor=mix(o,p,f);
     }
   </script>
@@ -96,6 +103,7 @@
       n++;
       const i1 = n % len
       const i2 = (n + 1) % len
+      // 蒙版图像
       const i3 = Math.round(Math.random() * 4)
 
       const originImg = new Image()

@@ -36,6 +36,7 @@ const defAttr = () => ({
   categorySize: 0,
   attributes: {},
   uniforms: {},
+  // 贴图集合
   maps: {},
 });
 export default class Poly {
@@ -111,21 +112,34 @@ export default class Poly {
         magFilter,
         minFilter,
       } = val;
-
+      // 反转图像元Y轴
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1);
+      // 激活纹理单元
       gl.activeTexture(gl[`TEXTURE${ind}`]);
       const texture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, texture);
 
-      gl.texImage2D(gl.TEXTURE_2D, 0, format, format, gl.UNSIGNED_BYTE, image);
+      gl.texImage2D(
+        // 2维纹理对象
+        gl.TEXTURE_2D,
+        // 图像层级
+        0,
+        // 图像数据格式
+        format,
+        format,
+        // 图像源的数据类型
+        gl.UNSIGNED_BYTE,
+        image
+      );
 
       wrapS && gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
       wrapT && gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, wrapT);
 
       magFilter &&
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, magFilter);
-
+      // 9727 - 缩小滤波器过滤方法的索引位置 与分子贴图相关的方法都是大于9727的
       if (!minFilter || minFilter > 9729) {
+        // 分子贴图属性设置
         gl.generateMipmap(gl.TEXTURE_2D);
       }
 

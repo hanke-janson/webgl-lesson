@@ -52,6 +52,7 @@
 
         //数据源
         const source = new Float32Array([
+            // 三个顶点位置分量  两个图钉位置分量
             -0.5, -0.5, -0.5, 0, 0,
             -0.5, 0.5, -0.5, 0, 0.5,
             0.5, -0.5, -0.5, 0.25, 0,
@@ -155,7 +156,7 @@
         gl.bindTexture(gl.TEXTURE_2D, texture)
 
         const image = new Image()
-        image.src = './images/mf2.jpg'
+        image.src = './images/mf.jpg'
         image.onload = function () {
             gl.texImage2D(
                 gl.TEXTURE_2D,

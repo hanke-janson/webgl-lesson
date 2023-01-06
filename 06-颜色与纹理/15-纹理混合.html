@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>纹理合成</title>
+    <title>纹理合成（透明度合成）</title>
     <style>
         body {
             margin: 0;
@@ -29,9 +29,14 @@
     uniform sampler2D u_Pattern;
     varying vec2 v_Pin;
     void main(){
+      // 原始图像
       vec4 o=texture2D(u_Sampler,v_Pin);
+      // 纹理图像
       vec4 p=texture2D(u_Pattern,v_Pin);
-      gl_FragColor=mix(o,p,0.5);
+      // 将p混合到o上
+      // mix()按照比例对两个纹理的合成方法 插值绘制
+      // 混合规则 mix(m,n,a)=m+(n-m)*a
+      gl_FragColor=mix(o,p,0.0);
     }
   </script>
     <script type="module">

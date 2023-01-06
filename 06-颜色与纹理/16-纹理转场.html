@@ -57,9 +57,11 @@
             0.4, 0.8, 1, 1,
             0.4, -0.8, 1, 0,
         ]);
-
+        // 当前展示的图像
         let n = 0
+        // 图像的长度
         let len = 5
+        // 图像混合比
         const obj = { ratio: 0 }
         let track = null
 
@@ -76,10 +78,12 @@
             attributes: {
                 a_Position: {
                     size: 2,
+                    // 在数据源中  位置坐标分量是从第0个索引位置开始的
                     index: 0
                 },
                 a_Pin: {
                     size: 2,
+                    // 在数据源中  图钉坐标分量是从第2个索引位置开始的
                     index: 2
                 },
             }
@@ -117,6 +121,7 @@
             rect.updateMaps()
             track = new Track(obj);
             track.start = new Date();
+            // 每张图片
             track.timeLen = 1500;
             track.onEnd = loadImg
             track.keyMap = new Map([
