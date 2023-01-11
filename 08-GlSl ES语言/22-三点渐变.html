@@ -2,35 +2,36 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>渐变</title>
-  <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8" />
+    <title>渐变</title>
+    <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
 
-    #canvas {
-      background-color: antiquewhite;
-    }
-  </style>
+        #canvas {
+            background-color: antiquewhite;
+        }
+    </style>
 </head>
 
 <body>
-  <canvas id="canvas"></canvas>
-  <!-- 顶点着色器 -->
-  <script id="vertexShader" type="x-shader/x-vertex">
+    <canvas id="canvas"></canvas>
+    <!-- 顶点着色器 -->
+    <script id="vertexShader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
     void main(){
       gl_Position=a_Position;
     }
   </script>
-  <!-- 片元着色器 -->
-  <script id="fragmentShader" type="x-shader/x-fragment">
+    <!-- 片元着色器 -->
+    <script id="fragmentShader" type="x-shader/x-fragment">
     precision mediump float;
-    //点1
+    //点1 位置
     vec2 p1=vec2(200,200);
+    //点1 颜色
     vec4 c1=vec4(1,1,0,1);
     //点2
     vec2 p2=vec2(800,600);
@@ -65,6 +66,7 @@
 
       vec2 v1f=gl_FragCoord.xy-p1;
       //float z=v1f.x*v12.y-v1f.y*v12.x;
+      // glsl内置叉乘方法cross(),参数必须为三维向量
       float z =cross(vec3(v1f,0),vec3(v12,0)).z;
 
       vec4 color=vec4(0);
@@ -89,77 +91,77 @@
       gl_FragColor=color;
     }
   </script>
-  <script type="module">
-    import { initShaders, parseColorStops } from "../jsm/Utils.js";
-    import Poly from './jsm/Poly.js'
+    <script type="module">
+        import { initShaders, parseColorStops } from "../jsm/Utils.js";
+        import Poly from './jsm/Poly.js'
 
-    const canvas = document.querySelector("#canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        const canvas = document.querySelector("#canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    // 获取着色器文本
-    const vsSource = document.querySelector("#vertexShader").innerText;
-    const fsSource = document.querySelector("#fragmentShader").innerText;
+        // 获取着色器文本
+        const vsSource = document.querySelector("#vertexShader").innerText;
+        const fsSource = document.querySelector("#fragmentShader").innerText;
 
-    //三维画笔
-    const gl = canvas.getContext("webgl");
+        //三维画笔
+        const gl = canvas.getContext("webgl");
 
-    //初始化着色器
-    initShaders(gl, vsSource, fsSource);
+        //初始化着色器
+        initShaders(gl, vsSource, fsSource);
 
-    //声明颜色 rgba
-    gl.clearColor(0, 0, 0, 1);
+        //声明颜色 rgba
+        gl.clearColor(0, 0, 0, 1);
 
-    const source = new Float32Array([
-      -1, 1,
-      -1, -1,
-      1, 1,
-      1, -1
-    ]);
+        const source = new Float32Array([
+            -1, 1,
+            -1, -1,
+            1, 1,
+            1, -1
+        ]);
 
-    const colorStops = [
-      {
-        color: [123, 0, 123, 255],
-        stop: 0
-      },
-      {
-        color: [255, 0, 0, 255],
-        stop: 0.2
-      },
-      {
-        color: [255, 255, 0, 255],
-        stop: 0.4
-      },
-      {
-        color: [0, 255, 0, 255],
-        stop: 0.6
-      },
-      {
-        color: [0, 0, 200, 255],
-        stop: 0.8
-      },
-      {
-        color: [123, 0, 123, 255],
-        stop: 1
-      },
-    ]
+        const colorStops = [
+            {
+                color: [123, 0, 123, 255],
+                stop: 0
+            },
+            {
+                color: [255, 0, 0, 255],
+                stop: 0.2
+            },
+            {
+                color: [255, 255, 0, 255],
+                stop: 0.4
+            },
+            {
+                color: [0, 255, 0, 255],
+                stop: 0.6
+            },
+            {
+                color: [0, 0, 200, 255],
+                stop: 0.8
+            },
+            {
+                color: [123, 0, 123, 255],
+                stop: 1
+            },
+        ]
 
-    const rect = new Poly({
-      gl,
-      source,
-      type: 'TRIANGLE_STRIP',
-      attributes: {
-        a_Position: {
-          size: 2,
-          index: 0
-        }
-      },
-    })
+        const rect = new Poly({
+            gl,
+            source,
+            type: 'TRIANGLE_STRIP',
+            attributes: {
+                a_Position: {
+                    size: 2,
+                    index: 0
+                }
+            },
+        })
 
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    rect.draw()
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        rect.draw()
 
-  </script>
+    </script>
 </body>
 
 </html>

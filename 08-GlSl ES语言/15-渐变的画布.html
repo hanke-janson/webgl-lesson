@@ -21,6 +21,7 @@
   <canvas id="canvas"></canvas>
   <!-- 顶点着色器 -->
   <script id="vertexShader" type="x-shader/x-vertex">
+    // attribute类型的顶点位置
     attribute vec4 a_Position;
     void main(){
       gl_Position=a_Position;
@@ -29,13 +30,15 @@
   <!-- 片元着色器 -->
   <script id="fragmentShader" type="x-shader/x-fragment">
     precision mediump float;
+    // uniform类型的画布尺寸
     uniform vec2 u_CanvasSize;
     void main(){
       gl_FragColor=vec4(
+        // gl_FragCoord是当前片元在canvas 画布中的像素位，其坐标系和canvas画布的坐标系类似，其坐标基底的两个分量都是一个像素的宽和高，只不过FragCoord 坐标原点在左下角，y轴朝上
         1.0-gl_FragCoord.x/u_CanvasSize.x,
         1.0-gl_FragCoord.y/u_CanvasSize.y,
         0.8,
-        1
+        1.0
       );
     }
   </script>
