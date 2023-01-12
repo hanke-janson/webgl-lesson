@@ -2,35 +2,37 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>放射</title>
-  <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8" />
+    <title>放射</title>
+    <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
 
-    #canvas {
-      background-color: antiquewhite;
-    }
-  </style>
+        #canvas {
+            background-color: antiquewhite;
+        }
+    </style>
 </head>
 
 <body>
-  <canvas id="canvas"></canvas>
-  <!-- 顶点着色器 -->
-  <script id="vertexShader" type="x-shader/x-vertex">
+    <canvas id="canvas"></canvas>
+    <!-- 顶点着色器 -->
+    <script id="vertexShader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
     void main(){
       gl_Position=a_Position;
     }
   </script>
-  <!-- 片元着色器 -->
-  <script id="fragmentShader" type="x-shader/x-fragment">
+    <!-- 片元着色器 -->
+    <script id="fragmentShader" type="x-shader/x-fragment">
     precision mediump float;
+    // 基于画布尺寸计算画布中心位  极点
     uniform vec2 u_CanvasSize;
     vec2 center=u_CanvasSize/2.0;
+    // 声明360°所对应的弧度
     float pi2=radians(360.0);
     
     float rand(vec2 fragCoord){
@@ -41,67 +43,69 @@
     
 
     void main(){
+      //当前片元相对于画布中心的向量
       vec2 p=gl_FragCoord.xy-center;
-      //ang=[-π,π]
+      //ang=[-π,π]当前片元的极角
       float ang=atan(p.y,p.x);
       //x=[-π*32.0,π*32.0]
       float x=ang*8.0;
+      // 只取了一行坐标
       vec2 v=vec2(int(x),0);
 
       float f = rand(v);
       gl_FragColor = vec4(f, f, f, 1);
     }
   </script>
-  <script type="module">
-    import { initShaders, parseColorStops } from "../jsm/Utils.js";
-    import Poly from './jsm/Poly.js'
+    <script type="module">
+        import { initShaders, parseColorStops } from "../jsm/Utils.js";
+        import Poly from './jsm/Poly.js'
 
-    const canvas = document.querySelector("#canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        const canvas = document.querySelector("#canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    // 获取着色器文本
-    const vsSource = document.querySelector("#vertexShader").innerText;
-    const fsSource = document.querySelector("#fragmentShader").innerText;
+        // 获取着色器文本
+        const vsSource = document.querySelector("#vertexShader").innerText;
+        const fsSource = document.querySelector("#fragmentShader").innerText;
 
-    //三维画笔
-    const gl = canvas.getContext("webgl");
+        //三维画笔
+        const gl = canvas.getContext("webgl");
 
-    //初始化着色器
-    initShaders(gl, vsSource, fsSource);
+        //初始化着色器
+        initShaders(gl, vsSource, fsSource);
 
-    //声明颜色 rgba
-    gl.clearColor(0, 0, 0, 1);
+        //声明颜色 rgba
+        gl.clearColor(0, 0, 0, 1);
 
-    const source = new Float32Array([
-      -1, 1,
-      -1, -1,
-      1, 1,
-      1, -1
-    ]);
+        const source = new Float32Array([
+            -1, 1,
+            -1, -1,
+            1, 1,
+            1, -1
+        ]);
 
-    const rect = new Poly({
-      gl,
-      source,
-      type: 'TRIANGLE_STRIP',
-      attributes: {
-        a_Position: {
-          size: 2,
-          index: 0
-        }
-      },
-      uniforms: {
-        u_CanvasSize: {
-          type: 'uniform2fv',
-          value: [canvas.width, canvas.height]
-        }
-      }
-    })
+        const rect = new Poly({
+            gl,
+            source,
+            type: 'TRIANGLE_STRIP',
+            attributes: {
+                a_Position: {
+                    size: 2,
+                    index: 0
+                }
+            },
+            uniforms: {
+                u_CanvasSize: {
+                    type: 'uniform2fv',
+                    value: [canvas.width, canvas.height]
+                }
+            }
+        })
 
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    rect.draw()
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        rect.draw()
 
-  </script>
+    </script>
 </body>
 
 </html>

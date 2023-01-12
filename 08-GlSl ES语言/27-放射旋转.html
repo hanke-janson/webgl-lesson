@@ -2,41 +2,43 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>放射</title>
-  <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
-  <style>
-    body {
-      margin: 0;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8" />
+    <title>放射</title>
+    <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
 
-    #canvas {
-      background-color: antiquewhite;
-    }
-  </style>
+        #canvas {
+            background-color: antiquewhite;
+        }
+    </style>
 </head>
 
 <body>
-  <canvas id="canvas"></canvas>
-  <!-- 顶点着色器 -->
-  <script id="vertexShader" type="x-shader/x-vertex">
+    <canvas id="canvas"></canvas>
+    <!-- 顶点着色器 -->
+    <script id="vertexShader" type="x-shader/x-vertex">
     attribute vec4 a_Position;
     void main(){
       gl_Position=a_Position;
     }
   </script>
-  <!-- 片元着色器 -->
-  <script id="fragmentShader" type="x-shader/x-fragment">
+    <!-- 片元着色器 -->
+    <script id="fragmentShader" type="x-shader/x-fragment">
     precision mediump float;
     uniform vec2 u_CanvasSize;
+    // 时间戳
     uniform float u_Stamp;
 
     vec2 center=u_CanvasSize/2.0;
     float pi2=radians(360.0);
-
+    //u_Stamp 浏览器的刷新时间，一般为16 17左右
     float angOffset=u_Stamp*0.002;
     //float angOffset=u_Stamp*0.001;
+    // 基于时间戳建立一个旋转矩阵
     float cosAng=cos(angOffset);
     float sinAng=sin(angOffset);
     mat2 modelMatrix=mat2(
@@ -53,6 +55,7 @@
 
     void main(){
       vec2 p=gl_FragCoord.xy-center;
+      // 使用模型矩阵旋转当前像素相对画布中心的一个位置
       p=modelMatrix*p;
       float ang=atan(p.y,p.x);
       float x=ang*16.0;
@@ -62,69 +65,69 @@
       gl_FragColor = vec4(f, f, f, 1);
     }
   </script>
-  <script type="module">
-    import { initShaders, parseColorStops } from "../jsm/Utils.js";
-    import Poly from './jsm/Poly.js'
+    <script type="module">
+        import { initShaders, parseColorStops } from "../jsm/Utils.js";
+        import Poly from './jsm/Poly.js'
 
-    const canvas = document.querySelector("#canvas");
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+        const canvas = document.querySelector("#canvas");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-    // 获取着色器文本
-    const vsSource = document.querySelector("#vertexShader").innerText;
-    const fsSource = document.querySelector("#fragmentShader").innerText;
+        // 获取着色器文本
+        const vsSource = document.querySelector("#vertexShader").innerText;
+        const fsSource = document.querySelector("#fragmentShader").innerText;
 
-    //三维画笔
-    const gl = canvas.getContext("webgl");
+        //三维画笔
+        const gl = canvas.getContext("webgl");
 
-    //初始化着色器
-    initShaders(gl, vsSource, fsSource);
+        //初始化着色器
+        initShaders(gl, vsSource, fsSource);
 
-    //声明颜色 rgba
-    gl.clearColor(0, 0, 0, 1);
+        //声明颜色 rgba
+        gl.clearColor(0, 0, 0, 1);
 
-    const source = new Float32Array([
-      -1, 1,
-      -1, -1,
-      1, 1,
-      1, -1
-    ]);
+        const source = new Float32Array([
+            -1, 1,
+            -1, -1,
+            1, 1,
+            1, -1
+        ]);
 
 
-    const rect = new Poly({
-      gl,
-      source,
-      type: 'TRIANGLE_STRIP',
-      attributes: {
-        a_Position: {
-          size: 2,
-          index: 0
-        }
-      },
-      uniforms: {
-        u_CanvasSize: {
-          type: 'uniform2fv',
-          value: [canvas.width, canvas.height]
-        },
-        u_Stamp: {
-          type: 'uniform1f',
-          value: 0
-        }
-      }
-    })
+        const rect = new Poly({
+            gl,
+            source,
+            type: 'TRIANGLE_STRIP',
+            attributes: {
+                a_Position: {
+                    size: 2,
+                    index: 0
+                }
+            },
+            uniforms: {
+                u_CanvasSize: {
+                    type: 'uniform2fv',
+                    value: [canvas.width, canvas.height]
+                },
+                u_Stamp: {
+                    type: 'uniform1f',
+                    value: 0
+                }
+            }
+        })
 
-    gl.clear(gl.COLOR_BUFFER_BIT);
-    rect.draw()
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        rect.draw()
+        // 接收一个时间戳
+        !(function ani(stamp) {
+            rect.uniforms.u_Stamp.value = stamp;
+            rect.updateUniform();
+            gl.clear(gl.COLOR_BUFFER_BIT);
+            rect.draw()
+            requestAnimationFrame(ani)
+        })()
 
-    !(function ani(stamp) {
-      rect.uniforms.u_Stamp.value = stamp;
-      rect.updateUniform();
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      rect.draw()
-      requestAnimationFrame(ani)
-    })()
-
-  </script>
+    </script>
 </body>
 
 </html>
