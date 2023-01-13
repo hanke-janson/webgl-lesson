@@ -2,60 +2,69 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>位移</title>
-  <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
+    <meta charset="UTF-8" />
+    <title>位移</title>
+    <link rel="icon" href="https://img.kaikeba.com/kkb_portal_icon.ico">
 </head>
 
 <body>
-  <script type="module">
-    import { Group, Matrix4, Object3D, Scene, Vector3, } from 'https://unpkg.com/three/build/three.module.js';
+    <script type="module">
+        // Group 数组对象 可以包含多个三维物体或者数组对象
+        // Matrix4 四维矩阵对象
+        // Object3D 三维对象
+        // Scene 场景对象 包含了所有的物体
+        // Vector3 三维向量对象
+        import { Group, Matrix4, Object3D, Scene, Vector3, } from 'https://unpkg.com/three/build/three.module.js';
 
-    //世界坐标系-宇宙
-    const m1 = new Matrix4()
-    m1.elements = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      0, 0, 0, 1,
-    ]
+        //世界坐标系-宇宙[O1;i1,j1,k1]  单位矩阵
+        const m1 = new Matrix4()
+        m1.elements = [
+            // i1(1,0,0)
+            1, 0, 0, 0,
+            // j1(0,1,0)
+            0, 1, 0, 0,
+            // k1(0,0,1)
+            0, 0, 1, 0,
+            // O1(0,0,0)
+            0, 0, 0, 1,
+        ]
 
-    //本地坐标系-银河系
-    const m2 = new Matrix4()
-    m2.elements = [
-      1, 0, 0, 0,
-      0, 1, 0, 0,
-      0, 0, 1, 0,
-      1, 2, 3, 1,
-    ]
+        //本地坐标系-银河系[O2;i2,j2,k2]
+        const m2 = new Matrix4()
+        m2.elements = [
+            1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            1, 2, 3, 1,
+        ]
 
-    //太阳在银河系内的本地坐标位
-    const P2 = new Vector3(4, 5, 6)
+        //太阳在银河系内的本地坐标位
+        const P2 = new Vector3(4, 5, 6)
 
-    //创造宇宙
-    const universe = new Scene()
-    universe.applyMatrix4(m1)
+        //创造宇宙
+        const universe = new Scene()
+        universe.applyMatrix4(m1)
 
-    //创造银河系
-    const galaxy = new Group()
-    galaxy.applyMatrix4(m2)
+        //创造银河系
+        const galaxy = new Group()
+        galaxy.applyMatrix4(m2)
 
-    //创造太阳
-    const sun = new Object3D()
-    sun.position.copy(P2)
+        //创造太阳
+        const sun = new Object3D()
+        sun.position.copy(P2)
 
-    //银河系包含太阳
-    galaxy.add(sun)
+        //银河系包含太阳
+        galaxy.add(sun)
 
-    //宇宙包含银河系
-    universe.add(galaxy)
+        //宇宙包含银河系
+        universe.add(galaxy)
 
-    //求太阳在宇宙中的世界位
-    const P1 = new Vector3()
-    sun.getWorldPosition(P1)
-    console.log(P1);
+        //求太阳在宇宙中的世界位
+        const P1 = new Vector3()
+        sun.getWorldPosition(P1)
+        console.log(P1);
 
-  </script>
+    </script>
 </body>
 
 </html>
