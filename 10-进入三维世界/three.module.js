@@ -13980,7 +13980,7 @@ function WebGLCubeMaps(renderer) {
     dispose: dispose,
   };
 }
-
+// 正交相机
 class OrthographicCamera extends Camera {
   constructor(
     left = -1,
@@ -14006,7 +14006,7 @@ class OrthographicCamera extends Camera {
 
     this.near = near;
     this.far = far;
-
+    // 缩放矩阵
     this.updateProjectionMatrix();
   }
 
@@ -14057,9 +14057,13 @@ class OrthographicCamera extends Camera {
 
     this.updateProjectionMatrix();
   }
-
-  updateProjectionMatrix() {
+    // zoom值和近裁剪面的尺寸成反比
+    // 近裁剪面的尺寸和我们在同一深度所看物体的数量成正比
+    // 近裁剪面的尺寸和我们所看的同一物体的尺寸成反比
+    updateProjectionMatrix() {
+    // 相机可视区域宽度的一半 / 缩放系数
     const dx = (this.right - this.left) / (2 * this.zoom);
+    // 相机可视区域高度的一半 / 缩放系数
     const dy = (this.top - this.bottom) / (2 * this.zoom);
     const cx = (this.right + this.left) / 2;
     const cy = (this.top + this.bottom) / 2;
@@ -43295,7 +43299,7 @@ class Spherical {
 
     return this;
   }
-
+  // 三维坐标转球坐标
   setFromVector3(v) {
     return this.setFromCartesianCoords(v.x, v.y, v.z);
   }

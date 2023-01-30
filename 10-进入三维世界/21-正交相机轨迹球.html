@@ -129,6 +129,7 @@
     const zoomScale = 0.95
 
     /* 旋转轨道 */
+    // 定义沿某个轴旋转相机视点的四元数
     const quaternion = new Quaternion()
 
 
@@ -213,7 +214,7 @@
       const ratioX = x / clientWidth
       const ratioY = -y / clientHeight
 
-      //基于高度的x位置比-用于旋转量的计算
+      //基于高度的x位置比  用于旋转量的计算
       const ratioBaseHeight = x / clientHeight
       //位移量  
       const ratioLen = new Vector2(ratioBaseHeight, ratioY).length()

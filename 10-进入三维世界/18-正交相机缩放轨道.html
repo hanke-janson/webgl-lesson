@@ -143,16 +143,21 @@
     canvas.addEventListener('wheel', handleMouseWheel)
     function handleMouseWheel({ deltaY }) {
       console.log('deltaY', deltaY);
+      // 当 deltaY<0 时，是向上滑动滚轮，会缩小裁剪面；
+      // 当 deltaY > 0 时，是向下滑动滚轮，会放大裁剪面。
       if (deltaY < 0) {
+        // 将缩放系数变大
         dolly(1 / zoomScale)
       } else {
         dolly(zoomScale)
       }
+      // 更新pvMatrix
       update()
     }
-
+    // 对相机的zoom进行缩放
     function dolly(dollyScale) {
       camera.zoom *= dollyScale
+      // 缩放改变了 所以需要对相机的投影矩阵进行更新
       camera.updateProjectionMatrix()
     }
 
