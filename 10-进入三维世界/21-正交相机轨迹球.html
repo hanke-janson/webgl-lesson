@@ -216,7 +216,7 @@
 
       //基于高度的x位置比  用于旋转量的计算
       const ratioBaseHeight = x / clientHeight
-      //位移量  
+      //位移量  鼠标在canvas画布中移动的距离
       const ratioLen = new Vector2(ratioBaseHeight, ratioY).length()
       //旋转量
       const angle = ratioLen * pi2
@@ -242,7 +242,7 @@
       //基于位移方向和视线获取旋转轴-上方向y轴
       const axis = moveDir.clone().cross(eyeDir)
 
-      //基于旋转轴和旋转量建立四元数
+      //基于旋转轴和旋转量建立四元数 通过某个旋转轴旋转多少度
       quaternion.setFromAxisAngle(axis, angle)
 
       update()
@@ -261,6 +261,7 @@
       camera.position.copy(
         target.clone().add(rotateOffset)
       )
+      // 更新相机上方向
       camera.up.applyQuaternion(quaternion)
 
       //更新投影视图矩阵
