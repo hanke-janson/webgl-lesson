@@ -46,6 +46,7 @@
     const fsSource = document.getElementById('fragmentShader').innerText;
     initShaders(gl, vsSource, fsSource);
     gl.clearColor(0, 0, 0, 1);
+    // 深度测试可以解决物体的遮挡问题，不然后面的物体可能挡住前面的物体
     gl.enable(gl.DEPTH_TEST);
 
     /* 透视相机 */
