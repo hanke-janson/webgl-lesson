@@ -65,9 +65,10 @@
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     const gl = canvas.getContext('webgl');
-    gl.clearColor(0, 0, 0, 1);
+    // 画布颜色
+    gl.clearColor(0.5, 0.5, 0.5, 1);
 
-    /* 相机 */
+    /* 正交相机 */
     const halfH = 1
     const ratio = canvas.width / canvas.height
     const halfW = halfH * ratio
@@ -103,7 +104,7 @@
           u_PvMatrix: {
             value: new Matrix4().elements,
             type: 'uniformMatrix4fv'
-          },
+          }, 
           u_ModelMatrix: {
             value: new Matrix4().elements,
             type: 'uniformMatrix4fv'
@@ -139,7 +140,7 @@
       const vs = document.getElementById('textureVertexShader').innerText
       const fs = document.getElementById('textureFragmentShader').innerText
       const program = createProgram(gl, vs, fs)
-
+ 
       // 材质
       const mat = new Mat({
         program,

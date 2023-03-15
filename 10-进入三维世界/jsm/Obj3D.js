@@ -1,3 +1,7 @@
+/**
+ * 三维对象
+ * 主要用来对geo几何对象和mat材质对象进行统一初始化和更新
+ */
 const defAttr = () => ({
   geo:null,
   mat:null,

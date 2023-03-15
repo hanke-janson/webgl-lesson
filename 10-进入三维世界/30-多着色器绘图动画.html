@@ -25,6 +25,7 @@
       precision mediump float;
       uniform float u_Time;
       void main(){
+        // 使用正弦函数将时间映射到了0~1之间
         float r=(sin(u_Time/200.0)+1.0)/2.0;
         gl_FragColor=vec4(r,0.7,0.4,1);
       }
