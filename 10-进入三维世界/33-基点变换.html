@@ -100,14 +100,16 @@
     const mi = new Matrix4()
     // 冰箱本地矩阵
     const mb = new Matrix4()
-    //模型矩阵
+    //模型矩阵  mb*mi
     const mm = new Matrix4()
-    //基点
+    //基点 顶点平展开索引位置
     let orignInd = 4
 
     // 基于图片的变换基点布阵
     setOrign(orignInd)
+    // 通过顶点索引寻找变换基点
     function setOrign(i) {
+        // 从顶点集合获取对应索引的xy基点
       const [x, y] = [vertices[i], vertices[i + 1]]
       mi.setPosition(-x, -y, 0)
       mb.setPosition(x, y, 0)
@@ -160,16 +162,21 @@
       scence.add(obj)
       render()
     }
-
+    // 弧度 
     let ang = 0
     function render() {
       ang += 0.02
+      // 缩放值
       const s = (Math.sin(ang) + 1) / 2
+      // 取模型矩阵
       mm.copy(
+        // 冰箱的模型矩阵 克隆一份做变换
         mb.clone()
+        // 基于弧度变化绕Z轴旋转
           .multiply(
             new Matrix4().makeRotationZ(ang)
           )
+          // 基于向量缩放
           .scale(new Vector3(s, s, 1))
           .multiply(mi)
       )

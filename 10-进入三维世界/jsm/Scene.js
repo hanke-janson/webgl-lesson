@@ -25,6 +25,7 @@ export default class Scene {
       obj.init(gl);
     });
   }
+  // 使内容置其上
   unshift(...objs) {
     const { children, gl } = this;
     objs.forEach((obj) => {
