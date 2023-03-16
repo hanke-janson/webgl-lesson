@@ -2,88 +2,104 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>鼠标选择三维对象</title>
+    <meta charset="UTF-8">
+    <title>鼠标选择三维对象</title>
 </head>
 
 <body>
-  <script type="module">
-    import {
-      Matrix4, OrthographicCamera, Vector3, Vector2,
-      Plane, Ray
-    } from 'https://unpkg.com/three/build/three.module.js';
+    <script type="module">
+        import {
+            Matrix4, OrthographicCamera, Vector3, Vector2,
+            Plane, Ray
+        } from 'https://unpkg.com/three/build/three.module.js';
 
-    // 三角形ABC
-    const A = new Vector3(-6, 0, -4)
-    const B = new Vector3(0, 0, 4)
-    const C = new Vector3(6, 0, -4)
-    /* const A = new Vector3(-6, 6, -4)
-    const B = new Vector3(0, 6, 4)
-    const C = new Vector3(6, 6, -4) */
-    /* const A = new Vector3(-6, 9, -4)
-    const B = new Vector3(0, 9, 4)
-    const C = new Vector3(6, 9, -4) */
+        // 三角形ABC
+        const A = new Vector3(-6, 0, -4)
+        const B = new Vector3(0, 0, 4)
+        const C = new Vector3(6, 0, -4)
+        /* const A = new Vector3(-6, 6, -4)
+        const B = new Vector3(0, 6, 4)
+        const C = new Vector3(6, 6, -4) */
+        /* const A = new Vector3(-6, 9, -4)
+        const B = new Vector3(0, 9, 4)
+        const C = new Vector3(6, 9, -4) */
 
-    // 视点
-    const E = new Vector3(0, 12, 16)
-    // 鼠标点
-    // const P = new Vector3(0, 3, 4)
-    const P = new Vector3(0, 3, -4)
+        // 视点
+        const E = new Vector3(0, 12, 16)
+        // 鼠标点
+        // const P = new Vector3(0, 3, 4)
+        const P = new Vector3(0, 3, -4)
 
-    {
-      // 三角形ABC的法线
-      const AB = new Vector3().subVectors(B, A)
-      const BC = new Vector3().subVectors(C, B)
-      //法线-垂直于向量AB、BC的一条单位向量
-      const n = new Vector3().crossVectors(AB, BC).normalize()
+        {
+            // 三角形ABC的法线
+            const AB = new Vector3().subVectors(B, A)
+            const BC = new Vector3().subVectors(C, B)
+            //法线-垂直于向量AB、BC的一条单位向量
+            const n = new Vector3().crossVectors(AB, BC).normalize()
 
-      // 射线方向
-      const v = new Vector3().subVectors(P, E).normalize()
+            // 射线方向
+            const v = new Vector3().subVectors(P, E).normalize()
 
-      // 交点M=((A-E)·n/v·n)*v+E
-      const M = v.clone().multiplyScalar(
-        A.clone().sub(E).dot(n) / v.clone().dot(n)
-      ).add(E)
+            // 交点M=((A-E)·n/v·n)*v+E
+            const M = v.clone().multiplyScalar(
+                A.clone().sub(E).dot(n) / v.clone().dot(n)
+            ).add(E)
 
-      // 三角形ABC
-      const triangle = [A, B, C]
-      //空间点是否在三角形中
-      function inTriangle(M, triangle) {
-        let bool = true
-        for (let i = 0; i < 3; i++) {
-          let j = (i + 1) % 3
-          const [a, b] = [triangle[i], triangle[j]]
-          const ma = a.clone().sub(M)
-          const ab = b.clone().sub(a)
-          // 垂线
-          const d = ma.clone().cross(ab)
-          // 实数
-          const len = d.dot(n)
-          if (len < 0) {
-            bool = false
-            break
-          }
+            // 三角形ABC
+            const triangle = [A, B, C]
+            //空间点是否在三角形中
+            function inTriangle(M, triangle) {
+                // 默认空间点在三角形中
+                let bool = true
+                // 遍历三角形三个边，可求三条垂线，并判断这三条垂线是否均在此三角形平面的法线的正方向上，如果均在法线正方向上 ，则此空间点在三角形平面中
+                for (let i = 0; i < 3; i++) {
+                    // i为边的第一个点的索引值，j为边的第二个点的索引值
+                    let j = (i + 1) % 3
+                    // 三角形边的两个端点
+                    const [a, b] = [triangle[i], triangle[j]]
+                    // 获取端点到空间点的向量（如果点在三角形内的话，是按照逆时针方向绘制）
+                    const ma = a.clone().sub(M)
+                    const ab = b.clone().sub(a)
+                    // ma和ab叉乘求垂线
+                    const d = ma.clone().cross(ab)
+                    // 实数
+                    const len = d.dot(n)
+                    if (len < 0) {
+                        // 点积为负，垂线和法线夹角为180°，垂线在法线的反方向上，确定空间点不在三角形平面内
+                        bool = false
+                        break
+                    }
+                }
+                return bool
+            }
+            const bool = inTriangle(M, triangle)
+            console.log(bool);
+            console.log('M', M);
+
         }
-        return bool
-      }
-      const bool = inTriangle(M, triangle)
-      console.log(bool);
-      console.log('M', M);
 
-    }
+        {
+            const ray = new Ray(E).lookAt(P)
+            const M = new Vector3()
+            // 判断射线是否穿过一个三角形，！！注意：如果没在，则返回Vector3 {x: 0, y: 0, z: 0}，如果交点就是0，0，0，那么此方法不适用，需要自己取写逻辑判断
+            // intersectTriangle ( a : Vector3, b : Vector3, c : Vector3, backfaceCulling : Boolean, target : Vector3 )
+            // a, b, c - 组成三角形的三个Vector3
+            // backfaceCulling - 是否使用背面剔除(降低工作量，忽略背面的三角形平面)
+            // target — 结果将会被复制到这一Vector3中
+            ray.intersectTriangle(
+                A, B, C,
+                true,
+                M
+            )
+            console.log('M-three', M);
+            console.log(
+                M.x.toFixed(5),
+                M.y.toFixed(5),
+                M.z.toFixed(5)
+            );
+        }
 
-    {
-      const ray = new Ray(E).lookAt(P)
-      const M = new Vector3()
-      ray.intersectTriangle(
-        A, B, C,
-        true,
-        M
-      )
-      console.log('M-three', M);
-    }
-
-  </script>
+    </script>
 </body>
 
 </html>
